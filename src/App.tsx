@@ -77,7 +77,7 @@ export function App() {
             <div className="hero-visual-wrap">
               <div className="hero-visual-inner">
                 <img
-                  src={heroFeatured.images[0]}
+                  src={BRAND.heroImage}
                   alt={`PETZLIFE ${heroFeatured.name}`}
                   className="hero-visual-img"
                 />
