@@ -682,6 +682,13 @@ button {
   color: var(--color-ink-secondary);
 }
 
+.footer-disclaimer {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--color-ink-muted);
+  line-height: 1.6;
+}
+
 .footer-wechat-card {
   display: flex;
   flex-direction: column;

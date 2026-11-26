@@ -258,6 +258,9 @@ export function App() {
                 className="footer-logo"
               />
               <p className="footer-tagline">{BRAND.tagline}</p>
+              <p className="footer-disclaimer">
+                商品资料来自淘宝店铺清单 · 实际价格及运费以淘宝为准
+              </p>
             </div>
 
             <div className="footer-wechat-card">
