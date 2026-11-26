@@ -59,6 +59,7 @@ export function App() {
 
   const clothingProducts = PRODUCTS.filter((p) => p.category === '服装');
   const accessoryProducts = PRODUCTS.filter((p) => p.category === '周边');
+  const heroFeatured = PRODUCTS.find((p) => p.id === '07') ?? PRODUCTS[0];
 
   return (
     <>
@@ -72,89 +73,78 @@ export function App() {
         />
       ) : (
         <main>
-          <section className="hero" aria-label="品牌首屏">
-            <div className="container hero-inner">
-              <div className="hero-showcase">
-                <a
-                  href="#/product/01"
-                  className="hero-frame hero-frame--side"
-                  aria-label="查看 芋泥朵朵毛衣"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openProduct('01');
-                  }}
-                >
-                  <img
-                    src="/assets/products/01/01.webp"
-                    alt="PETZLIFE 芋泥朵朵毛衣"
-                  />
-                </a>
-                <a
-                  href="#/product/04"
-                  className="hero-frame hero-frame--center"
-                  aria-label="查看 云朵马甲棉服"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openProduct('04');
-                  }}
-                >
-                  <img
-                    src="/assets/products/04/01.webp"
-                    alt="PETZLIFE 云朵马甲棉服"
-                  />
-                </a>
-                <a
-                  href="#/product/10"
-                  className="hero-frame hero-frame--side"
-                  aria-label="查看 户外透气冲锋衣雨衣"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openProduct('10');
-                  }}
-                >
-                  <img
-                    src="/assets/products/10/01.webp"
-                    alt="PETZLIFE 户外透气冲锋衣雨衣"
-                  />
-                </a>
+          <section aria-label="品牌首屏">
+            <div className="hero-visual-wrap">
+              <div className="hero-visual-inner">
+                <img
+                  src={heroFeatured.images[0]}
+                  alt={`PETZLIFE ${heroFeatured.name}`}
+                  className="hero-visual-img"
+                />
               </div>
+            </div>
 
-              <h1 className="hero-tagline">{BRAND.tagline}</h1>
-              <p className="hero-subtitle">
-                PETZLIFE 宠物服装与生活周边 · 精选 {PRODUCTS.length} 款全部呈现
-              </p>
+            <div className="hero-editorial">
+              <div className="container hero-editorial-grid">
+                <div>
+                  <p className="hero-tagline">{BRAND.tagline}</p>
+                  <h1 className="hero-heading">PETZLIFE 全部系列</h1>
 
-              <div className="hero-actions">
-                <a
-                  id="hero-taobao-link"
-                  href={BRAND.taobaoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn--taobao"
-                >
-                  前往淘宝店铺
-                </a>
-                <a
-                  id="hero-xhs-link"
-                  href={BRAND.xiaohongshuUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn--xhs"
-                >
-                  前往小红书
-                </a>
+                  <p className="hero-featured-label">照片里的单品</p>
+                  <button
+                    id="hero-featured-product"
+                    type="button"
+                    className="hero-featured-item"
+                    onClick={() => openProduct(heroFeatured.id)}
+                  >
+                    <span className="hero-featured-left">
+                      <img
+                        src={heroFeatured.images[0]}
+                        alt={heroFeatured.name}
+                        className="hero-featured-thumb"
+                      />
+                      <span>
+                        <span className="hero-featured-name">
+                          {heroFeatured.name}
+                        </span>
+                        <span
+                          className="hero-featured-cat"
+                          style={{ display: 'block' }}
+                        >
+                          {heroFeatured.category} ·{' '}
+                          {formatPrice(heroFeatured.price)}
+                        </span>
+                      </span>
+                    </span>
+                    <span className="hero-featured-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </button>
+                </div>
+
+                <div className="hero-shop-stack">
+                  <a
+                    id="hero-taobao-link"
+                    href={BRAND.taobaoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="action-bar action-bar--taobao"
+                  >
+                    <span>前往淘宝店铺</span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                  <a
+                    id="hero-xhs-link"
+                    href={BRAND.xiaohongshuUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="action-bar action-bar--xhs"
+                  >
+                    <span>前往小红书主页</span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
               </div>
-
-              <a
-                href="#clothing"
-                className="hero-scroll-hint"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateHome('clothing');
-                }}
-              >
-                向下浏览全部商品 ↓
-              </a>
             </div>
           </section>
 
@@ -165,18 +155,15 @@ export function App() {
           >
             <div className="container">
               <div className="section-header">
-                <div className="section-title-wrap">
-                  <h2 id="clothing-heading" className="section-title">
-                    服装
-                  </h2>
-                  <span className="section-count">
-                    {clothingProducts.length} 款
-                  </span>
-                </div>
-                <p className="section-caption">点击任意款式查看多图细节</p>
+                <h2 id="clothing-heading" className="section-title">
+                  服装
+                </h2>
+                <span className="section-count">
+                  共 {clothingProducts.length} 款
+                </span>
               </div>
 
-              <div className="product-grid">
+              <div className="lookbook-grid">
                 {clothingProducts.map((product) => (
                   <a
                     key={product.id}
@@ -195,11 +182,14 @@ export function App() {
                         loading="lazy"
                       />
                     </div>
-                    <div className="product-card-body">
-                      <h3 className="product-card-name">{product.name}</h3>
-                      <p className="product-card-price">
-                        {formatPrice(product.price)}
-                      </p>
+                    <div className="product-card-meta">
+                      <div className="product-card-row">
+                        <h3 className="product-card-name">{product.name}</h3>
+                        <p className="product-card-price">
+                          {formatPrice(product.price)}
+                        </p>
+                      </div>
+                      <p className="product-card-cat">{product.category}</p>
                     </div>
                   </a>
                 ))}
@@ -214,18 +204,15 @@ export function App() {
           >
             <div className="container">
               <div className="section-header">
-                <div className="section-title-wrap">
-                  <h2 id="accessories-heading" className="section-title">
-                    周边
-                  </h2>
-                  <span className="section-count">
-                    {accessoryProducts.length} 款
-                  </span>
-                </div>
-                <p className="section-caption">居家睡眠与日常陪伴好物</p>
+                <h2 id="accessories-heading" className="section-title">
+                  周边
+                </h2>
+                <span className="section-count">
+                  共 {accessoryProducts.length} 款
+                </span>
               </div>
 
-              <div className="product-grid product-grid--accessories">
+              <div className="lookbook-grid">
                 {accessoryProducts.map((product) => (
                   <a
                     key={product.id}
@@ -244,11 +231,14 @@ export function App() {
                         loading="lazy"
                       />
                     </div>
-                    <div className="product-card-body">
-                      <h3 className="product-card-name">{product.name}</h3>
-                      <p className="product-card-price">
-                        {formatPrice(product.price)}
-                      </p>
+                    <div className="product-card-meta">
+                      <div className="product-card-row">
+                        <h3 className="product-card-name">{product.name}</h3>
+                        <p className="product-card-price">
+                          {formatPrice(product.price)}
+                        </p>
+                      </div>
+                      <p className="product-card-cat">{product.category}</p>
                     </div>
                   </a>
                 ))}
@@ -260,8 +250,8 @@ export function App() {
 
       <footer id="wechat" className="site-footer">
         <div className="container">
-          <div className="footer-grid">
-            <div className="footer-brand">
+          <div className="footer-top">
+            <div>
               <img
                 src={BRAND.logo}
                 alt="PETZLIFE"
@@ -270,37 +260,34 @@ export function App() {
               <p className="footer-tagline">{BRAND.tagline}</p>
             </div>
 
-            <div className="footer-contact-card">
-              <h2 className="footer-contact-title">微信咨询与官方店铺</h2>
-              <p className="footer-contact-desc">
-                想咨询尺码、款式搭配或其他问题，可添加 PETZLIFE 官方微信号：
-              </p>
-
+            <div className="footer-wechat-card">
+              <h2 className="footer-wechat-title">微信咨询与官方店铺</h2>
               <div className="footer-wechat-row">
                 <span id="footer-wechat-id" className="footer-wechat-id">
                   {BRAND.wechatId}
                 </span>
                 <WechatCopyButton id="footer-copy-wechat" />
               </div>
-
-              <div className="footer-store-links">
+              <div className="footer-shop-links">
                 <a
                   id="footer-taobao-link"
                   href={BRAND.taobaoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn--taobao"
+                  className="action-bar action-bar--taobao"
                 >
-                  前往淘宝店铺
+                  <span>前往淘宝店铺</span>
+                  <span aria-hidden="true">↗</span>
                 </a>
                 <a
                   id="footer-xhs-link"
                   href={BRAND.xiaohongshuUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn--xhs"
+                  className="action-bar action-bar--xhs"
                 >
-                  前往小红书
+                  <span>前往小红书主页</span>
+                  <span aria-hidden="true">↗</span>
                 </a>
               </div>
             </div>

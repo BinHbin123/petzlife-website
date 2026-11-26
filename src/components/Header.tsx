@@ -8,25 +8,6 @@ export function Header({ onNavigateHome }: HeaderProps) {
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <nav className="nav-group" aria-label="商品分类导航">
-          <button
-            id="nav-clothing"
-            type="button"
-            className="nav-link"
-            onClick={() => onNavigateHome('clothing')}
-          >
-            服装
-          </button>
-          <button
-            id="nav-accessories"
-            type="button"
-            className="nav-link"
-            onClick={() => onNavigateHome('accessories')}
-          >
-            周边
-          </button>
-        </nav>
-
         <a
           id="nav-logo"
           href="#/"
@@ -44,7 +25,23 @@ export function Header({ onNavigateHome }: HeaderProps) {
           />
         </a>
 
-        <div className="nav-group nav-group--right">
+        <nav className="header-nav" aria-label="主导航">
+          <button
+            id="nav-clothing"
+            type="button"
+            className="nav-link"
+            onClick={() => onNavigateHome('clothing')}
+          >
+            服装
+          </button>
+          <button
+            id="nav-accessories"
+            type="button"
+            className="nav-link"
+            onClick={() => onNavigateHome('accessories')}
+          >
+            周边
+          </button>
           <button
             id="nav-wechat"
             type="button"
@@ -53,7 +50,7 @@ export function Header({ onNavigateHome }: HeaderProps) {
           >
             微信咨询
           </button>
-        </div>
+        </nav>
       </div>
     </header>
   );

@@ -34,7 +34,7 @@ export function WechatCopyButton({ id }: WechatCopyButtonProps) {
       id={id}
       type="button"
       onClick={handleCopy}
-      className={`btn btn--copy ${copied ? 'btn--copy-done' : ''}`}
+      className={`btn-copy ${copied ? 'btn-copy--done' : ''}`}
       aria-live="polite"
     >
       {copied ? '已复制微信号' : '复制微信号'}

@@ -13,32 +13,12 @@ export function ProductDetail({
   onBack,
   onSelectProduct,
 }: ProductDetailProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [wechatOpen, setWechatOpen] = useState(false);
 
   useEffect(() => {
-    setActiveIndex(0);
+    setWechatOpen(false);
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, [product.id]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (product.images.length <= 1) return;
-      if (e.key === 'ArrowLeft') {
-        setActiveIndex((prev) =>
-          prev === 0 ? product.images.length - 1 : prev - 1,
-        );
-      } else if (e.key === 'ArrowRight') {
-        setActiveIndex((prev) =>
-          prev === product.images.length - 1 ? 0 : prev + 1,
-        );
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [product.images.length]);
-
-  const currentImage = product.images[activeIndex] ?? product.images[0];
-  const hasMultiple = product.images.length > 1;
 
   const relatedProducts = PRODUCTS.filter((item) => item.id !== product.id)
     .sort((a, b) => {
@@ -59,7 +39,7 @@ export function ProductDetail({
           <button
             id="detail-back-button"
             type="button"
-            className="back-button"
+            className="back-link"
             onClick={onBack}
           >
             <span aria-hidden="true">←</span>
@@ -67,127 +47,98 @@ export function ProductDetail({
           </button>
         </div>
 
-        <div className="detail-layout">
-          <section className="gallery" aria-label="商品图片展示">
-            <div className="gallery-main">
-              <img
-                src={currentImage}
-                alt={`${product.name} - 展示图 ${activeIndex + 1}`}
-              />
-              {hasMultiple && (
-                <>
-                  <button
-                    id="gallery-prev"
-                    type="button"
-                    className="gallery-arrow gallery-arrow--prev"
-                    aria-label="上一张图片"
-                    onClick={() =>
-                      setActiveIndex((prev) =>
-                        prev === 0 ? product.images.length - 1 : prev - 1,
-                      )
-                    }
-                  >
-                    ‹
-                  </button>
-                  <button
-                    id="gallery-next"
-                    type="button"
-                    className="gallery-arrow gallery-arrow--next"
-                    aria-label="下一张图片"
-                    onClick={() =>
-                      setActiveIndex((prev) =>
-                        prev === product.images.length - 1 ? 0 : prev + 1,
-                      )
-                    }
-                  >
-                    ›
-                  </button>
-                  <span className="gallery-counter">
-                    {activeIndex + 1} / {product.images.length}
-                  </span>
-                </>
-              )}
-            </div>
+        <section className="detail-upper" aria-label="商品信息与购买入口">
+          <div className="detail-main-photo">
+            <img src={product.images[0]} alt={product.name} />
+          </div>
 
-            {hasMultiple && (
-              <div className="gallery-thumbs" role="list" aria-label="切换细节图">
-                {product.images.map((imgSrc, idx) => (
-                  <button
-                    key={imgSrc}
-                    type="button"
-                    className={`gallery-thumb ${
-                      idx === activeIndex ? 'gallery-thumb--active' : ''
-                    }`}
-                    aria-label={`查看第 ${idx + 1} 张图片`}
-                    aria-current={idx === activeIndex ? 'true' : undefined}
-                    onClick={() => setActiveIndex(idx)}
-                  >
-                    <img src={imgSrc} alt={`${product.name} 缩略图 ${idx + 1}`} />
-                  </button>
-                ))}
-              </div>
-            )}
-          </section>
-
-          <section className="detail-info" aria-label="商品信息与购买入口">
-            <span
-              className={`detail-category ${
-                product.category === '周边' ? 'detail-category--accessory' : ''
-              }`}
-            >
-              {product.category}
-            </span>
-
+          <div className="detail-summary">
+            <p className="detail-eyebrow">
+              {product.category} · {BRAND.name}
+            </p>
             <h1 className="detail-title">{product.name}</h1>
-            <p className="detail-brand-note">{BRAND.name}</p>
-
             <p className="detail-price">{formatPrice(product.price)}</p>
+            <p className="detail-note">
+              点击下方入口前往 PETZLIFE 官方淘宝店铺或小红书主页选购与下单；尺码与搭配疑问可展开微信咨询。
+            </p>
 
-            <div className="detail-divider" />
-
-            <p className="detail-section-label">前往官方店铺购买</p>
-            <div className="detail-buy-buttons">
+            <div className="detail-actions">
               <a
                 id="detail-taobao-link"
                 href={BRAND.taobaoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn--taobao"
+                className="action-bar action-bar--taobao"
               >
-                前往淘宝店铺
+                <span>前往淘宝店铺</span>
+                <span aria-hidden="true">↗</span>
               </a>
+
               <a
                 id="detail-xhs-link"
                 href={BRAND.xiaohongshuUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn--xhs"
+                className="action-bar action-bar--xhs"
               >
-                前往小红书
+                <span>前往小红书主页</span>
+                <span aria-hidden="true">↗</span>
               </a>
-            </div>
-            <p className="detail-buy-hint">
-              点击后将打开 PETZLIFE 对应平台的店铺主页完成选购与下单。
-            </p>
 
-            <div className="wechat-box">
               <div>
-                <p className="wechat-box-label">尺码或搭配疑问？添加微信咨询</p>
-                <p className="wechat-box-id">{BRAND.wechatId}</p>
+                <button
+                  id="detail-wechat-toggle"
+                  type="button"
+                  className="action-bar action-bar--accordion"
+                  aria-expanded={wechatOpen}
+                  onClick={() => setWechatOpen((prev) => !prev)}
+                >
+                  <span>微信咨询</span>
+                  <span aria-hidden="true">{wechatOpen ? '−' : '+'}</span>
+                </button>
+                {wechatOpen && (
+                  <div className="accordion-panel">
+                    <div>
+                      <p className="accordion-wechat-label">PETZLIFE 官方微信号</p>
+                      <p className="accordion-wechat-id">{BRAND.wechatId}</p>
+                    </div>
+                    <WechatCopyButton id="detail-copy-wechat" />
+                  </div>
+                )}
               </div>
-              <WechatCopyButton id="detail-copy-wechat" />
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
+
+        <section className="detail-shoot" aria-label="商品实拍">
+          <aside className="detail-shoot-aside">
+            <h2 className="detail-shoot-title">商品实拍</h2>
+            <p className="detail-shoot-desc">
+              {BRAND.name} · {product.name}
+              <br />
+              共 {product.images.length} 张实拍细节图，向下滑动即可完整浏览。
+            </p>
+          </aside>
+
+          <div className="detail-shoot-stack">
+            {product.images.map((imgSrc, idx) => (
+              <div key={imgSrc} className="detail-shoot-frame">
+                <img
+                  src={imgSrc}
+                  alt={`${product.name} 实拍图 ${idx + 1}`}
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
 
         <section className="related-section" aria-label="继续浏览其他款式">
           <div className="section-header">
-            <div className="section-title-wrap">
-              <h2 className="section-title">继续浏览</h2>
-              <span className="section-count">MORE</span>
-            </div>
+            <h2 className="section-title">继续浏览</h2>
+            <span className="section-count">MORE</span>
           </div>
-          <div className="product-grid">
+          <div className="lookbook-grid">
             {relatedProducts.map((item) => (
               <a
                 key={item.id}
@@ -201,9 +152,12 @@ export function ProductDetail({
                 <div className="product-card-media">
                   <img src={item.images[0]} alt={item.name} loading="lazy" />
                 </div>
-                <div className="product-card-body">
-                  <h3 className="product-card-name">{item.name}</h3>
-                  <p className="product-card-price">{formatPrice(item.price)}</p>
+                <div className="product-card-meta">
+                  <div className="product-card-row">
+                    <h3 className="product-card-name">{item.name}</h3>
+                    <p className="product-card-price">{formatPrice(item.price)}</p>
+                  </div>
+                  <p className="product-card-cat">{item.category}</p>
                 </div>
               </a>
             ))}
