@@ -58,19 +58,22 @@ export function ProductDetail({
             </p>
             <h1 className="detail-title">{product.name}</h1>
             <p className="detail-price">{formatPrice(product.price)}</p>
+            <p id="detail-shipping" className="detail-shipping">
+              运费：{BRAND.shippingRule}
+            </p>
             <p className="detail-note">
-              点击下方入口前往 PETZLIFE 官方淘宝店铺或小红书主页选购与下单；尺码与搭配疑问可展开微信咨询。
+              点击下方按钮可直达淘宝同款商品页或小红书品牌主页；尺码与搭配疑问可展开微信咨询。
             </p>
 
             <div className="detail-actions">
               <a
                 id="detail-taobao-link"
-                href={BRAND.taobaoUrl}
+                href={product.taobaoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="action-bar action-bar--taobao"
               >
-                <span>前往淘宝店铺</span>
+                <span>前往淘宝购买同款</span>
                 <span aria-hidden="true">↗</span>
               </a>
 

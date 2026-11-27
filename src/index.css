@@ -582,6 +582,12 @@ button {
   color: var(--color-ink);
 }
 
+.detail-shipping {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--color-ink-secondary);
+}
+
 .detail-note {
   margin: 14px 0 26px;
   font-size: 13px;
