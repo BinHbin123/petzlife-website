@@ -9,7 +9,7 @@
 *credentials*
 
 # 真实用户数据
-data/
+/data/
 *.db
 *.sqlite
 *.sqlite3
